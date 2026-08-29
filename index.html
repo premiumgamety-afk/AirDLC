@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirDLC | Minecraft 1.21.4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0b0b12;
+            color: #e0e0ff;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 200, 255, 0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(180, 0, 255, 0.04) 0%, transparent 60%);
+        }
+        .container {
+            max-width: 1100px;
+            width: 95%;
+            padding: 40px 30px;
+            background: rgba(10, 10, 20, 0.88);
+            border: 1px solid rgba(0, 200, 255, 0.12);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 60px rgba(0, 150, 255, 0.04);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 200, 255, 0.07);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #00ccff, #aa66ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo span {
+            font-weight: 300;
+            font-size: 13px;
+            -webkit-text-fill-color: #555;
+            letter-spacing: 0.5px;
+        }
+        .version-tag {
+            background: rgba(0, 200, 255, 0.06);
+            padding: 5px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 200, 255, 0.15);
+            font-size: 12px;
+            color: #66ddff;
+            letter-spacing: 0.3px;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        @media (max-width: 700px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .info-section h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        .info-section h2 .highlight {
+            color: #00ccff;
+        }
+        .feature-list {
+            list-style: none;
+            margin-top: 14px;
+        }
+        .feature-list li {
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #b0bcdd;
+        }
+        .feature-list li::before {
+            content: "▸";
+            color: #00ccff;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        .feature-list .badge {
+            background: rgba(0, 200, 255, 0.08);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            color: #66ddff;
+            margin-left: auto;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .compatibility {
+            margin-top: 22px;
+            padding: 16px 18px;
+            background: rgba(0, 200, 255, 0.02);
+            border-radius: 10px;
+            border: 1px dashed rgba(0, 200, 255, 0.08);
+        }
+        .compatibility p {
+            font-size: 13px;
+            color: #7788aa;
+        }
+        .compatibility strong {
+            color: #66ddff;
+        }
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .download-card {
+            background: linear-gradient(145deg, rgba(0, 200, 255, 0.02), rgba(0, 0, 0, 0.35));
+            padding: 22px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 200, 255, 0.06);
+            transition: all 0.25s ease;
+        }
+        .download-card:hover {
+            border-color: rgba(0, 200, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.04);
+        }
+        .download-card .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #556;
+        }
+        .download-card .filename {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .download-card .size {
+            font-size: 12px;
+            color: #556;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 11px 32px;
+            background: linear-gradient(135deg, #00ccff, #8844ee);
+            color: #0b0b12;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .download-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 200, 255, 0.2);
+        }
+        .download-btn.secondary {
+            background: transparent;
+            color: #66ddff;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+        }
+        .download-btn.secondary:hover {
+            background: rgba(0, 200, 255, 0.04);
+            box-shadow: none;
+        }
+        .checksum {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #334;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+        .footer {
+            margin-top: 35px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(0, 200, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12px;
+            color: #445;
+        }
+        .footer .status {
+            color: #66ddff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer .status .dot {
+            width: 7px;
+            height: 7px;
+            background: #66ddff;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        .footer .links a {
+            color: #556;
+            text-decoration: none;
+            margin-left: 16px;
+            transition: color 0.25s;
+        }
+        .footer .links a:hover {
+            color: #66ddff;
+        }
+        .tg-contact {
+            background: rgba(0, 136, 204, 0.04);
+            border: 1px solid rgba(0, 136, 204, 0.08);
+            padding: 10px 16px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #7788aa;
+            margin-top: 8px;
+        }
+        .tg-contact a {
+            color: #66ddff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .tg-contact a:hover {
+            text-decoration: underline;
+        }
+        .warning-banner {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: rgba(255, 180, 0, 0.04);
+            border: 1px solid rgba(255, 180, 0, 0.10);
+            border-radius: 10px;
+            font-size: 12px;
+            color: #aa9944;
+        }
+        .warning-banner strong {
+            color: #ffcc44;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">
+            AirDLC <span>// minecraft 1.21.4</span>
+        </div>
+        <div class="version-tag">
+            ⚡ build 0.6.3 &bull; 29.08.2026
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-grid">
+
+        <!-- LEFT -->
+        <div class="info-section">
+            <h2>⚡ <span class="highlight">AirDLC</span> Client</h2>
+            <p style="color: #7788aa; margin-bottom: 10px; font-size: 14px;">
+                Ghost client for Minecraft 1.21.4 — clean, fast, invisible.
+            </p>
+
+            <ul class="feature-list">
+                <li>KillAura &amp; Silent Aim <span class="badge">v3</span></li>
+                <li>Reach &amp; Hitbox <span class="badge">custom</span></li>
+                <li>Velocity &amp; Anti-KB <span class="badge">100%</span></li>
+                <li>AutoCrystal &amp; Surround <span class="badge">1.21.4</span></li>
+                <li>ESP &amp; Nametags <span class="badge">glow</span></li>
+                <li>Scaffold &amp; FastPlace <span class="badge">tick</span></li>
+                <li>Invisible to AAC / Grim / Vulcan <span class="badge">bypass</span></li>
+            </ul>
+
+            <div class="compatibility">
+                <p><strong>✔</strong> Works on <strong>1.21.4</strong> (vanilla / fabric / via)</p>
+                <p><strong>✔</strong> Anti-cheat bypass: AAC 5.2 &bull; Grim &bull; Vulcan &bull; NCP</p>
+                <p><strong>✔</strong> Injection mode: <strong>DLL</strong> + <strong>Java agent</strong></p>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="download-section">
+
+            <div class="download-card">
+                <div class="label">📦 stable release</div>
+                <div class="filename">AirDLC_1.21.4_loader.exe</div>
+                <div class="size">2.4 MB &bull; SHA256: a1b2c3d4...</div>
+                <a href="#" class="download-btn">⬇ Download</a>
+                <div class="checksum">MD5: 9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c</div>
+            </div>
+
+            <div class="download-card">
+                <div class="label">🧪 dev build</div>
+                <div class="filename">AirDLC_dev_1.21.4.jar</div>
+                <div class="size">1.8 MB &bull; SHA256: f9e8d7c6...</div>
+                <a href="#" class="download-btn secondary">⬇ Dev version</a>
+            </div>
+
+            <div class="tg-contact">
+                <span>📱</span> Поддержка: <a href="#">@airdlc_support</a> &bull; новости: <a href="#">@airdlc_news</a>
+            </div>
+
+            <!-- ⚠️ ПРЕДУПРЕЖДЕНИЕ -->
+            <div class="warning-banner">
+                ⚠️ <strong>Важно:</strong> При скачивании читов из неофициальных источников есть риск получить вредоносное ПО.
+                Всегда проверяйте файлы через <strong>VirusTotal</strong> перед запуском.
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="status">
+            <span class="dot"></span> status: online &bull; inject ready
+        </div>
+        <div class="links">
+            <a href="#">Docs</a>
+            <a href="#">Changelog</a>
+            <a href="#">FAQ</a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
