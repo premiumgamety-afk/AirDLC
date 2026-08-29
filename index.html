@@ -3,321 +3,450 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Delta Client</title>
+    <title>delta</title>
     <style>
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            background: #0a0a12;
-            color: #e0e0ff;
-            font-family: 'Segoe UI', 'Courier New', monospace;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(0, 200, 255, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(180, 0, 255, 0.05) 0%, transparent 60%);
         }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== CONTAINER ===== */
         .container {
-            max-width: 1100px;
-            width: 95%;
-            padding: 40px 30px;
-            background: rgba(10, 10, 20, 0.88);
-            border: 1px solid rgba(0, 200, 255, 0.12);
-            border-radius: 14px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 0 60px rgba(0, 150, 255, 0.04);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px 40px;
         }
+
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(0, 200, 255, 0.07);
+            padding: 12px 0 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
             flex-wrap: wrap;
             gap: 12px;
         }
         .logo {
             font-size: 28px;
             font-weight: 800;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #00ccff, #aa66ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            color: #1a1a2e;
         }
         .logo span {
             font-weight: 300;
-            font-size: 13px;
-            -webkit-text-fill-color: #555;
-            letter-spacing: 0.5px;
+            color: #888;
+            font-size: 14px;
+            margin-left: 6px;
         }
-        .version-tag {
-            background: rgba(0, 200, 255, 0.06);
-            padding: 5px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 200, 255, 0.15);
-            font-size: 12px;
-            color: #66ddff;
-            letter-spacing: 0.3px;
+        .header .cabinet {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
         }
-        .main-grid {
+        .header .cabinet:hover {
+            background: #2a2a4e;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 50px 0 30px;
+            text-align: left;
+        }
+        .hero h1 {
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            color: #1a1a2e;
+        }
+        .hero h1 .highlight {
+            color: #0066ff;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #555;
+            margin: 16px 0 30px;
+            max-width: 500px;
+            line-height: 1.5;
+        }
+        .hero .btns {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .hero .btns .btn-primary {
+            background: #0066ff;
+            color: #fff;
+            padding: 14px 36px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .hero .btns .btn-primary:hover {
+            background: #0052cc;
+            transform: scale(1.02);
+        }
+        .hero .btns .btn-secondary {
+            background: transparent;
+            color: #1a1a2e;
+            padding: 14px 36px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .hero .btns .btn-secondary:hover {
+            border-color: #0066ff;
+        }
+
+        /* ===== INFO BLOCKS ===== */
+        .info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-top: 30px;
+            margin: 50px 0 40px;
         }
         @media (max-width: 700px) {
-            .main-grid {
+            .info-grid {
                 grid-template-columns: 1fr;
             }
         }
-        .info-section h2 {
-            font-size: 22px;
-            font-weight: 600;
+        .info-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: box-shadow 0.2s;
+        }
+        .info-card:hover {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+        .info-card .icon {
+            font-size: 28px;
             margin-bottom: 12px;
-            color: #fff;
         }
-        .info-section h2 .highlight {
-            color: #00ccff;
+        .info-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a2e;
         }
-        .feature-list {
-            list-style: none;
-            margin-top: 14px;
-        }
-        .feature-list li {
-            padding: 9px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .info-card p {
             font-size: 14px;
-            color: #b0bcdd;
+            color: #666;
+            line-height: 1.5;
         }
-        .feature-list li::before {
-            content: "▸";
-            color: #00ccff;
-            font-weight: bold;
-            font-size: 17px;
+
+        /* ===== TARIFFS ===== */
+        .tariffs {
+            margin: 40px 0;
         }
-        .feature-list .badge {
-            background: rgba(0, 200, 255, 0.08);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            color: #66ddff;
-            margin-left: auto;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .compatibility {
-            margin-top: 22px;
-            padding: 16px 18px;
-            background: rgba(0, 200, 255, 0.02);
-            border-radius: 10px;
-            border: 1px dashed rgba(0, 200, 255, 0.08);
-        }
-        .compatibility p {
-            font-size: 13px;
-            color: #7788aa;
-        }
-        .compatibility strong {
-            color: #66ddff;
-        }
-        .download-section {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-        .download-card {
-            background: linear-gradient(145deg, rgba(0, 200, 255, 0.02), rgba(0, 0, 0, 0.35));
-            padding: 22px 24px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 200, 255, 0.06);
-            transition: all 0.25s ease;
-        }
-        .download-card:hover {
-            border-color: rgba(0, 200, 255, 0.2);
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.04);
-        }
-        .download-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #556;
-        }
-        .download-card .filename {
-            font-size: 17px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 3px;
-        }
-        .download-card .size {
-            font-size: 12px;
-            color: #556;
-        }
-        .download-btn {
-            display: inline-block;
-            margin-top: 14px;
-            padding: 11px 32px;
-            background: linear-gradient(135deg, #00ccff, #8844ee);
-            color: #0b0b12;
+        .tariffs h2 {
+            font-size: 26px;
             font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tariffs .sub {
+            color: #666;
             font-size: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.25s ease;
+            margin-bottom: 30px;
+        }
+        .tariff-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 700px) {
+            .tariff-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .tariff-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 24px 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+        .tariff-card:hover {
+            box-shadow: 0 6px 30px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+        .tariff-card .label {
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
+            color: #888;
+            font-weight: 600;
         }
-        .download-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 200, 255, 0.2);
-        }
-        .download-btn.secondary {
-            background: transparent;
-            color: #66ddff;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-        }
-        .download-btn.secondary:hover {
-            background: rgba(0, 200, 255, 0.04);
-            box-shadow: none;
-        }
-        .promo-section {
-            margin-top: 20px;
-            padding: 16px 20px;
-            background: rgba(255, 200, 0, 0.05);
-            border: 1px solid rgba(255, 200, 0, 0.12);
-            border-radius: 10px;
-            text-align: center;
-        }
-        .promo-section .promo-code {
-            font-size: 22px;
+        .tariff-card .name {
+            font-size: 20px;
             font-weight: 700;
-            color: #ffcc44;
-            letter-spacing: 3px;
+            margin: 6px 0 10px;
+            color: #1a1a2e;
         }
-        .promo-section .promo-label {
-            font-size: 13px;
-            color: #8899aa;
+        .tariff-card .desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            min-height: 44px;
         }
-        .footer {
-            margin-top: 35px;
-            padding-top: 18px;
-            border-top: 1px solid rgba(0, 200, 255, 0.05);
+        .tariff-card .price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+        .tariff-card .price small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+        }
+        .tariff-card .btn-buy {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 32px;
+            background: #0066ff;
+            color: #fff;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .tariff-card .btn-buy:hover {
+            background: #0052cc;
+        }
+        .tariff-card .btn-buy.secondary {
+            background: transparent;
+            color: #1a1a2e;
+            border: 1px solid #ccc;
+        }
+        .tariff-card .btn-buy.secondary:hover {
+            border-color: #0066ff;
+            background: transparent;
+        }
+
+        /* ===== PROMO ===== */
+        .promo-line {
+            margin: 30px 0 10px;
+            padding: 18px 24px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.04);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            font-size: 12px;
-            color: #445;
+            gap: 12px;
         }
-        .footer .status {
-            color: #66ddff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .promo-line .text {
+            font-size: 14px;
+            color: #555;
         }
-        .footer .status .dot {
-            width: 7px;
-            height: 7px;
-            background: #66ddff;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s infinite;
+        .promo-line .text strong {
+            color: #1a1a2e;
         }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.2; }
-            100% { opacity: 1; }
+        .promo-line .link {
+            color: #0066ff;
+            font-weight: 600;
         }
-        .footer .links a {
-            color: #556;
-            text-decoration: none;
-            margin-left: 16px;
-            transition: color 0.25s;
+        .promo-line .link:hover {
+            text-decoration: underline;
         }
-        .footer .links a:hover {
-            color: #66ddff;
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
         }
-        .warning-banner {
-            margin-top: 16px;
-            padding: 12px 16px;
-            background: rgba(255, 180, 0, 0.04);
-            border: 1px solid rgba(255, 180, 0, 0.08);
-            border-radius: 8px;
-            font-size: 12px;
-            color: #aa9944;
+        @media (max-width: 700px) {
+            .footer {
+                grid-template-columns: 1fr 1fr;
+            }
         }
-        .warning-banner strong {
-            color: #ffcc44;
+        @media (max-width: 450px) {
+            .footer {
+                grid-template-columns: 1fr;
+            }
+        }
+        .footer .col h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+        .footer .col a {
+            display: block;
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+        .footer .col a:hover {
+            color: #0066ff;
+        }
+        .footer .copy {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            margin-top: 10px;
+        }
+        .footer .copy .brand {
+            color: #1a1a2e;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
+
 <div class="container">
+
+    <!-- ===== HEADER ===== -->
     <div class="header">
-        <div class="logo">Delta Client <span>// best cheat</span></div>
-        <div class="version-tag">🔥 build v2.5.1 &bull; 29.08.2026</div>
+        <div class="logo">delta <span>client.xyz</span></div>
+        <a href="#" class="cabinet">Кабинет</a>
     </div>
-    <div class="main-grid">
-        <div class="info-section">
-            <h2>⚡ <span class="highlight">Delta</span> Client</h2>
-            <p style="color: #7788aa; margin-bottom: 10px; font-size: 14px;">
-                Лучший клиент для Minecraft — PvP, фарм, обход античитов.
-            </p>
-            <ul class="feature-list">
-                <li>KillAura &amp; AttackAura <span class="badge">v3</span></li>
-                <li>Flight &amp; Spider &amp; Scaffold <span class="badge">bypass</span></li>
-                <li>AutoFarm &amp; AncientBot <span class="badge">фарм</span></li>
-                <li>AutoBuy &amp; AutoSwap <span class="badge">аукцион</span></li>
-                <li>ESP &amp; NameTags &amp; XRay <span class="badge">render</span></li>
-                <li>Обход AAC / Grim / Vulcan <span class="badge">bypass</span></li>
-            </ul>
-            <div class="compatibility">
-                <p><strong>✔</strong> Поддержка: FunTime &bull; SpookyTime &bull; ReallyWorld</p>
-                <p><strong>✔</strong> Режимы: PvP &bull; Фарм &bull; Анархия</p>
-            </div>
-        </div>
-        <div class="download-section">
-            <div class="download-card">
-                <div class="label">📦 официальная версия</div>
-                <div class="filename">DeltaClient_Loader.exe</div>
-                <div class="size">3.1 MB &bull; SHA256: a1b2c3d4...</div>
-                <a href="#" class="download-btn">⬇ Скачать</a>
-            </div>
-            <div class="download-card">
-                <div class="label">🧪 beta-версия</div>
-                <div class="filename">DeltaClient_Beta.jar</div>
-                <div class="size">2.4 MB &bull; SHA256: f9e8d7c6...</div>
-                <a href="#" class="download-btn secondary">⬇ Beta</a>
-            </div>
-            <div class="promo-section">
-                <div class="promo-label">🎁 Промокод на скидку</div>
-                <div class="promo-code">DELTA</div>
-            </div>
-            <div class="warning-banner">
-                ⚠️ <strong>Важно:</strong> Используй только официальный сайт <strong>deltaclient.xyz</strong>.
-                Пиратские версии могут содержать вирусы!
-            </div>
+
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <h1>
+            Клиент, который делает тебя <span class="highlight">непобедимым</span>.
+        </h1>
+        <p>Поднимите свой игровой процесс на новый уровень. Контроль, скорость и точность — всё уже внутри.</p>
+        <div class="btns">
+            <a href="#" class="btn-primary">Создать аккаунт</a>
+            <a href="#" class="btn-secondary">Документация</a>
         </div>
     </div>
+
+    <!-- ===== INFO BLOCKS ===== -->
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="icon">⬇️</div>
+            <h3>Скачайте клиент</h3>
+            <p>Загрузите лаунчер через личный кабинет на сайте. Он автоматически подтянет последнюю версию.</p>
+        </div>
+        <div class="info-card">
+            <div class="icon">🎮</div>
+            <h3>Играйте и побеждайте</h3>
+            <p>Выберите сервер и запускайте. Контроль, скорость и точность — с первой секунды.</p>
+        </div>
+        <div class="info-card">
+            <div class="icon">🚀</div>
+            <h3>Начни побеждать сегодня</h3>
+            <p>Присоединяйся к тысячам игроков, которые уже выбрали delta.</p>
+        </div>
+    </div>
+
+    <!-- ===== TARIFFS ===== -->
+    <div class="tariffs">
+        <h2>Товары</h2>
+        <div class="sub">Выберите план и получите мгновенный доступ ко всем функциям, обновлениям и поддержке.</div>
+
+        <div class="tariff-grid">
+            <!-- Тариф 1 -->
+            <div class="tariff-card">
+                <div class="label">ТАРИФ 1.16.5</div>
+                <div class="name">Delta 1.16.5</div>
+                <div class="desc">Вы получаете клиент абсолютно навсегда, так же все последующие обновления.</div>
+                <div class="price">799 <small>₽</small></div>
+                <a href="#" class="btn-buy">Купить</a>
+            </div>
+
+            <!-- Тариф 2 -->
+            <div class="tariff-card">
+                <div class="label">ТАРИФ 1.21.11</div>
+                <div class="name">Delta 1.21.11</div>
+                <div class="desc">Вы получаете ранний доступ к новым модулям, обновлениям клиента и эксклюзивным функциям.</div>
+                <div class="price">1249 <small>₽</small></div>
+                <a href="#" class="btn-buy">Купить</a>
+            </div>
+
+            <!-- Тариф 3 -->
+            <div class="tariff-card">
+                <div class="label">РАЗОВАЯ УСЛУГА</div>
+                <div class="name">Сброс HWID</div>
+                <div class="desc">Сброс привязки (HWID) на вашем аккаунте клиента к железу.</div>
+                <div class="price">449 <small>₽</small></div>
+                <a href="#" class="btn-buy secondary">Заказать</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PROMO ===== -->
+    <div class="promo-line">
+        <span class="text">⚡ <strong>Автоматические обновления</strong> и приоритетная поддержка. Также доступно на FunPay</span>
+        <a href="#" class="link">Перейти →</a>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
     <div class="footer">
-        <div class="status"><span class="dot"></span> status: online</div>
-        <div class="links">
-            <a href="#">Support</a>
-            <a href="#">Changelog</a>
-            <a href="#">Discord</a>
+        <div class="col">
+            <h4>Платформа</h4>
+            <a href="#">Создать аккаунт</a>
+            <a href="#">Войти в аккаунт</a>
+            <a href="#">Аккаунт</a>
+        </div>
+        <div class="col">
+            <h4>Навигация</h4>
+            <a href="#">Активность игроков</a>
+            <a href="#">Продукты</a>
+        </div>
+        <div class="col">
+            <h4>Документы</h4>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Условия пользования</a>
+            <a href="#">Возврат средств</a>
+            <a href="#">Обработка данных</a>
+        </div>
+        <div class="col">
+            <h4>&nbsp;</h4>
+            <a href="#">Поддержка</a>
+            <a href="#">Telegram</a>
+            <a href="#">FunPay</a>
+        </div>
+        <div class="copy">
+            © 2026 <span class="brand">delta</span>. Все права защищены. <br />
+            deltaclient.xyz inc
         </div>
     </div>
+
 </div>
+
 </body>
-                                                                                </html>
+    </html>
