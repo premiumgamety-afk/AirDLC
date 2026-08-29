@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AirDLC — визуальный клиент для Minecraft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141a;
+    --bg-raised: #171d26;
+    --bg-slot: #1d2530;
+    --grid-line: #232b37;
+    --grass: #7ed957;
+    --grass-dark: #4f9e33;
+    --amber: #ffb347;
+    --text: #eef1f5;
+    --text-dim: #93a1b3;
+    --border: #2d3846;
+    --shadow-hard: #05070a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+  }
+  .pixel{font-family:'Press Start 2P', monospace;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  a{color:inherit;}
+
+  /* ---------- layout helpers ---------- */
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+  section{padding:88px 0;}
+  @media (max-width:640px){ section{padding:56px 0;} }
+
+  /* ---------- nav ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:rgba(16,20,26,0.88);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1080px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:10px; font-size:14px; letter-spacing:0.5px;}
+  .logo-block{
+    width:22px; height:22px;
+    background:var(--grass);
+    box-shadow: inset -4px -4px 0 var(--grass-dark), inset 4px 4px 0 #a4e880;
+  }
+  .nav-links{display:flex; gap:28px; font-size:14px; color:var(--text-dim);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-links{display:none;}
+  @media(min-width:640px){ .nav-links{display:flex;} }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 20px;
+    background:var(--grass);
+    color:#0d1a08;
+    font-weight:700;
+    text-decoration:none;
+    font-size:14px;
+    border:2px solid var(--grass-dark);
+    box-shadow: 3px 3px 0 var(--shadow-hard);
+    transition: transform .08s ease;
+  }
+  .btn:hover{ transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--shadow-hard); }
+  .btn:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--shadow-hard); }
+  .btn.secondary{
+    background:var(--bg-slot);
+    color:var(--text);
+    border-color:var(--border);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding:96px 0 60px; position:relative;}
+  .eyebrow{
+    display:inline-block;
+    font-size:11px;
+    color:var(--grass);
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border:1px solid var(--grass-dark);
+    padding:6px 10px;
+    margin-bottom:24px;
+    background:rgba(126,217,87,0.06);
+  }
+  h1.hero-title{
+    font-size:clamp(32px, 6vw, 56px);
+    line-height:1.08;
+    margin:0 0 20px;
+    font-weight:800;
+    letter-spacing:-0.5px;
+  }
+  h1.hero-title .accent{color:var(--grass);}
+  .hero-sub{
+    color:var(--text-dim);
+    font-size:17px;
+    max-width:560px;
+    margin:0 0 36px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:44px;}
+  .version-tag{color:var(--text-dim); font-size:13px;}
+  .version-tag b{color:var(--text);}
+
+  /* HUD mock */
+  .hud-mock{
+    position:relative;
+    margin-top:20px;
+    border:2px solid var(--border);
+    background:
+      repeating-linear-gradient(0deg, #1a2f14 0 40px, #1e3617 40px 80px);
+    height:340px;
+    overflow:hidden;
+    box-shadow: 6px 6px 0 var(--shadow-hard);
+  }
+  .hud-mock::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(16,20,26,0) 60%, rgba(16,20,26,0.85) 100%);
+  }
+  .hud-fps{
+    position:absolute; top:14px; left:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    background:rgba(10,12,15,0.7);
+    padding:6px 10px;
+    border:1px solid var(--border);
+    color:var(--grass);
+  }
+  .hud-minimap{
+    position:absolute; top:14px; right:14px;
+    width:110px; height:110px;
+    border:2px solid var(--border);
+    background: radial-gradient(circle at 50% 50%, #2a4020 0%, #1a2b13 70%, #0f1a0a 100%);
+  }
+  .hud-minimap::after{
+    content:"";
+    position:absolute; top:50%; left:50%;
+    width:6px; height:6px;
+    background:var(--amber);
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 6px var(--amber);
+  }
+  .hud-hotbar{
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    display:flex; gap:4px;
+  }
+  .hud-slot{
+    width:38px; height:38px;
+    background:rgba(20,24,30,0.85);
+    border:2px solid var(--border);
+  }
+  .hud-slot.active{ border-color:var(--grass); }
+  .hud-caption{
+    position:absolute; bottom:64px; left:14px;
+    font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* ---------- features (inventory grid) ---------- */
+  .section-head{margin-bottom:44px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  h2{font-size:clamp(24px,4vw,34px); margin:0 0 10px; font-weight:800;}
+  .section-head p{color:var(--text-dim); max-width:520px; margin:0;}
+
+  .inventory{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:2px;
+    background:var(--border);
+    border:2px solid var(--border);
+  }
+  .slot{
+    background:var(--bg-slot);
+    padding:28px 24px;
+    position:relative;
+  }
+  .slot-icon{
+    width:46px; height:46px;
+    margin-bottom:18px;
+    border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg-raised);
+  }
+  .slot h3{font-size:16px; margin:0 0 8px;}
+  .slot p{font-size:14px; color:var(--text-dim); margin:0;}
+  .slot-tag{
+    position:absolute; top:16px; right:16px;
+    font-size:10px; color:var(--grass);
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- scope / honesty section ---------- */
+  .scope{
+    border:1px solid var(--border);
+    background:var(--bg-raised);
+    padding:32px;
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+  }
+  .scope-col{flex:1; min-width:220px;}
+  .scope-col h4{
+    font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+    margin:0 0 14px;
+  }
+  .scope-col.yes h4{color:var(--grass);}
+  .scope-col.no h4{color:#ff8a7a;}
+  .scope-col ul{margin:0; padding-left:18px; color:var(--text-dim); font-size:14px;}
+  .scope-col li{margin-bottom:8px;}
+
+  /* ---------- install steps ---------- */
+  .steps{list-style:none; margin:0; padding:0; counter-reset:step;}
+  .steps li{
+    counter-increment:step;
+    display:flex; gap:20px;
+    padding:20px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{
+    content:counter(step);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--grass);
+    background:var(--bg-slot);
+    border:1px solid var(--border);
+    width:32px; height:32px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .steps h4{margin:0 0 4px; font-size:15px;}
+  .steps p{margin:0; color:var(--text-dim); font-size:14px;}
+
+  /* ---------- FAQ ---------- */
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-item summary{
+    cursor:pointer;
+    padding:20px 0;
+    font-weight:600;
+    list-style:none;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{
+    content:"+";
+    color:var(--grass);
+    font-size:20px;
+  }
+  .faq-item[open] summary::after{content:"–";}
+  .faq-item p{color:var(--text-dim); margin:0 0 20px; font-size:14px;}
+
+  /* ---------- download cta ---------- */
+  .cta-block{
+    text-align:center;
+    border:2px solid var(--border);
+    background:var(--bg-raised);
+    padding:56px 24px;
+    position:relative;
+  }
+  .cta-block h2{margin-bottom:14px;}
+  .cta-block p{color:var(--text-dim); margin:0 0 30px;}
+  .cta-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:32px 0;
+    color:var(--text-dim);
+    font-size:13px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <div class="logo pixel" style="font-size:11px;">
+      <span class="logo-block"></span> AirDLC
+    </div>
+    <div class="nav-links">
+      <a href="#features">Функции</a>
+      <a href="#scope">Что это и что нет</a>
+      <a href="#install">Установка</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#download" class="btn">Скачать</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">визуальный клиент · minecraft java</span>
+    <h1 class="hero-title">Видеть больше,<br>играть <span class="accent">не жульничая</span>.</h1>
+    <p class="hero-sub">AirDLC — это миникарта, HUD, зум и лёгкие графические шейдеры поверх ванильного клиента. Никакого автоприцела, вида сквозь стены или ускорений — только удобство и картинка.</p>
+    <div class="hero-actions">
+      <a href="#download" class="btn">Скачать AirDLC</a>
+      <a href="#features" class="btn secondary">Что внутри</a>
+    </div>
+    <div class="version-tag mono">актуальная версия: <b>2.4.1</b> · Minecraft 1.20–1.21 · Fabric/Forge</div>
+
+    <div class="hud-mock" aria-hidden="true">
+      <div class="hud-fps">FPS: 244</div>
+      <div class="hud-minimap"></div>
+      <div class="hud-caption">HUD-превью</div>
+      <div class="hud-hotbar">
+        <div class="hud-slot active"></div>
+        <div class="hud-slot"></div>
+        <div class="hud-slot"></div>
+        <div class="hud-slot"></div>
+        <div class="hud-slot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">инвентарь функций</span>
+      <h2>Четыре слота, четыре функции</h2>
+      <p>Каждая функция включается отдельно — можно оставить только то, что нужно.</p>
+    </div>
+
+    <div class="inventory">
+      <div class="slot">
+        <span class="slot-tag">01</span>
+        <div class="slot-icon">🗺️</div>
+        <h3>Миникарта</h3>
+        <p>Показывает исследованную территорию, метки игроков из вашей команды и точки, которые вы сами поставили. Не раскрывает то, чего вы не видели.</p>
+      </div>
+      <div class="slot">
+        <span class="slot-tag">02</span>
+        <div class="slot-icon">📊</div>
+        <h3>Расширенный HUD</h3>
+        <p>Счётчик FPS, координаты, биом, время суток и таймеры эффектов — всё то, что и так доступно через F3, но читаемо и настраиваемо.</p>
+      </div>
+      <div class="slot">
+        <span class="slot-tag">03</span>
+        <div class="slot-icon">🔍</div>
+        <h3>Зум</h3>
+        <p>Приближение камеры по зажатой клавише — как бинокль. Не увеличивает дальность прорисовки блоков и не подсвечивает объекты сквозь стены.</p>
+      </div>
+      <div class="slot">
+        <span class="slot-tag">04</span>
+        <div class="slot-icon">✨</div>
+        <h3>Лёгкие шейдеры</h3>
+        <p>Мягкие тени, объёмный свет и сглаживание с упором на производительность — без просадки FPS на слабом железе.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scope">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">честно о границах</span>
+      <h2>Что AirDLC делает — и чего не делает</h2>
+      <p>Чтобы не было сюрпризов на сервере с правилами против читов.</p>
+    </div>
+    <div class="scope">
+      <div class="scope-col yes">
+        <h4>Включено</h4>
+        <ul>
+          <li>Миникарта по исследованной территории</li>
+          <li>Настраиваемый HUD и таймеры</li>
+          <li>Зум камеры</li>
+          <li>Косметические шейдеры и оптимизация рендера</li>
+        </ul>
+      </div>
+      <div class="scope-col no">
+        <h4>Отсутствует</h4>
+        <ul>
+          <li>ESP / wallhack (вид сквозь стены)</li>
+          <li>Aimbot, killaura, auto-block</li>
+          <li>X-ray руды и построек</li>
+          <li>Speed, fly, reach и другие ускорения</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">за 3 шага</span>
+      <h2>Установка</h2>
+    </div>
+    <ol class="steps">
+      <li>
+        <div>
+          <h4>Скачайте лоадер</h4>
+          <p>Установите Fabric или Forge под вашу версию Minecraft — AirDLC работает как обычный мод поверх них.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Поместите файл в папку mods</h4>
+          <p>Скачанный .jar-файл AirDLC перенесите в папку <span class="mono">.minecraft/mods</span>.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Запустите и настройте</h4>
+          <p>В игре откройте меню настроек мода, включите нужные слоты и подберите горячие клавиши.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">вопросы</span>
+      <h2>FAQ</h2>
+    </div>
+
+    <details class="faq-item" open>
+      <summary>Это разрешено на серверах?</summary>
+      <p>Функции AirDLC не дают игрового преимущества, которое обычно запрещают правила серверов (нет ESP, ускорений, автоатаки). Но правила у каждого сервера свои — перед игрой уточните список разрешённых модов у администрации.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Работает ли на слабом ПК?</summary>
+      <p>Шейдеры сделаны с упором на производительность и обычно не снижают FPS заметно; при необходимости их можно отключить отдельно от HUD и миникарты.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Есть версия для Bedrock?</summary>
+      <p>Пока нет — AirDLC поддерживает только Java Edition через Fabric и Forge.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Можно ли использовать в одиночной игре?</summary>
+      <p>Да, все функции доступны и в одиночном мире, и на серверах, где разрешены клиентские моды.</p>
+    </details>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="cta-block">
+      <span class="eyebrow">версия 2.4.1</span>
+      <h2>Скачать AirDLC</h2>
+      <p>Fabric и Forge · Minecraft 1.20–1.21 · ~4 МБ</p>
+      <div class="cta-actions">
+        <a href="#" class="btn">Скачать .jar</a>
+        <a href="#" class="btn secondary">Исходники на GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 AirDLC</span>
+    <span>Не аффилировано с Mojang или Microsoft</span>
+  </div>
+</footer>
+
+</body>
+</html>
