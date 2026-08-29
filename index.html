@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AirDLC | Minecraft 1.21.4</title>
+    <title>Delta Client</title>
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            background: #0b0b12;
+            background: #0a0a12;
             color: #e0e0ff;
             font-family: 'Segoe UI', 'Courier New', monospace;
             min-height: 100vh;
@@ -19,8 +19,8 @@
             justify-content: center;
             align-items: center;
             background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(0, 200, 255, 0.04) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(180, 0, 255, 0.04) 0%, transparent 60%);
+                radial-gradient(ellipse at 20% 50%, rgba(0, 200, 255, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(180, 0, 255, 0.05) 0%, transparent 60%);
         }
         .container {
             max-width: 1100px;
@@ -190,15 +190,23 @@
             background: rgba(0, 200, 255, 0.04);
             box-shadow: none;
         }
-        .checksum {
-            margin-top: 10px;
-            font-size: 11px;
-            color: #334;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
+        .promo-section {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(255, 200, 0, 0.05);
+            border: 1px solid rgba(255, 200, 0, 0.12);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .promo-section .promo-code {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffcc44;
+            letter-spacing: 3px;
+        }
+        .promo-section .promo-label {
+            font-size: 13px;
+            color: #8899aa;
         }
         .footer {
             margin-top: 35px;
@@ -240,32 +248,12 @@
         .footer .links a:hover {
             color: #66ddff;
         }
-        .tg-contact {
-            background: rgba(0, 136, 204, 0.04);
-            border: 1px solid rgba(0, 136, 204, 0.08);
-            padding: 10px 16px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #7788aa;
-            margin-top: 8px;
-        }
-        .tg-contact a {
-            color: #66ddff;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .tg-contact a:hover {
-            text-decoration: underline;
-        }
         .warning-banner {
-            margin-top: 20px;
-            padding: 14px 18px;
+            margin-top: 16px;
+            padding: 12px 16px;
             background: rgba(255, 180, 0, 0.04);
-            border: 1px solid rgba(255, 180, 0, 0.10);
-            border-radius: 10px;
+            border: 1px solid rgba(255, 180, 0, 0.08);
+            border-radius: 8px;
             font-size: 12px;
             color: #aa9944;
         }
@@ -275,90 +263,61 @@
     </style>
 </head>
 <body>
-
 <div class="container">
-
-    <!-- HEADER -->
     <div class="header">
-        <div class="logo">
-            AirDLC <span>// minecraft 1.21.4</span>
-        </div>
-        <div class="version-tag">
-            ⚡ build 0.6.3 &bull; 29.08.2026
-        </div>
+        <div class="logo">Delta Client <span>// best cheat</span></div>
+        <div class="version-tag">🔥 build v2.5.1 &bull; 29.08.2026</div>
     </div>
-
-    <!-- MAIN -->
     <div class="main-grid">
-
-        <!-- LEFT -->
         <div class="info-section">
-            <h2>⚡ <span class="highlight">AirDLC</span> Client</h2>
+            <h2>⚡ <span class="highlight">Delta</span> Client</h2>
             <p style="color: #7788aa; margin-bottom: 10px; font-size: 14px;">
-                Ghost client for Minecraft 1.21.4 — clean, fast, invisible.
+                Лучший клиент для Minecraft — PvP, фарм, обход античитов.
             </p>
-
             <ul class="feature-list">
-                <li>KillAura &amp; Silent Aim <span class="badge">v3</span></li>
-                <li>Reach &amp; Hitbox <span class="badge">custom</span></li>
-                <li>Velocity &amp; Anti-KB <span class="badge">100%</span></li>
-                <li>AutoCrystal &amp; Surround <span class="badge">1.21.4</span></li>
-                <li>ESP &amp; Nametags <span class="badge">glow</span></li>
-                <li>Scaffold &amp; FastPlace <span class="badge">tick</span></li>
-                <li>Invisible to AAC / Grim / Vulcan <span class="badge">bypass</span></li>
+                <li>KillAura &amp; AttackAura <span class="badge">v3</span></li>
+                <li>Flight &amp; Spider &amp; Scaffold <span class="badge">bypass</span></li>
+                <li>AutoFarm &amp; AncientBot <span class="badge">фарм</span></li>
+                <li>AutoBuy &amp; AutoSwap <span class="badge">аукцион</span></li>
+                <li>ESP &amp; NameTags &amp; XRay <span class="badge">render</span></li>
+                <li>Обход AAC / Grim / Vulcan <span class="badge">bypass</span></li>
             </ul>
-
             <div class="compatibility">
-                <p><strong>✔</strong> Works on <strong>1.21.4</strong> (vanilla / fabric / via)</p>
-                <p><strong>✔</strong> Anti-cheat bypass: AAC 5.2 &bull; Grim &bull; Vulcan &bull; NCP</p>
-                <p><strong>✔</strong> Injection mode: <strong>DLL</strong> + <strong>Java agent</strong></p>
+                <p><strong>✔</strong> Поддержка: FunTime &bull; SpookyTime &bull; ReallyWorld</p>
+                <p><strong>✔</strong> Режимы: PvP &bull; Фарм &bull; Анархия</p>
             </div>
         </div>
-
-        <!-- RIGHT -->
         <div class="download-section">
-
             <div class="download-card">
-                <div class="label">📦 stable release</div>
-                <div class="filename">AirDLC_1.21.4_loader.exe</div>
-                <div class="size">2.4 MB &bull; SHA256: a1b2c3d4...</div>
-                <a href="#" class="download-btn">⬇ Download</a>
-                <div class="checksum">MD5: 9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c</div>
+                <div class="label">📦 официальная версия</div>
+                <div class="filename">DeltaClient_Loader.exe</div>
+                <div class="size">3.1 MB &bull; SHA256: a1b2c3d4...</div>
+                <a href="#" class="download-btn">⬇ Скачать</a>
             </div>
-
             <div class="download-card">
-                <div class="label">🧪 dev build</div>
-                <div class="filename">AirDLC_dev_1.21.4.jar</div>
-                <div class="size">1.8 MB &bull; SHA256: f9e8d7c6...</div>
-                <a href="#" class="download-btn secondary">⬇ Dev version</a>
+                <div class="label">🧪 beta-версия</div>
+                <div class="filename">DeltaClient_Beta.jar</div>
+                <div class="size">2.4 MB &bull; SHA256: f9e8d7c6...</div>
+                <a href="#" class="download-btn secondary">⬇ Beta</a>
             </div>
-
-            <div class="tg-contact">
-                <span>📱</span> Поддержка: <a href="#">@airdlc_support</a> &bull; новости: <a href="#">@airdlc_news</a>
+            <div class="promo-section">
+                <div class="promo-label">🎁 Промокод на скидку</div>
+                <div class="promo-code">DELTA</div>
             </div>
-
-            <!-- ⚠️ ПРЕДУПРЕЖДЕНИЕ -->
             <div class="warning-banner">
-                ⚠️ <strong>Важно:</strong> При скачивании читов из неофициальных источников есть риск получить вредоносное ПО.
-                Всегда проверяйте файлы через <strong>VirusTotal</strong> перед запуском.
+                ⚠️ <strong>Важно:</strong> Используй только официальный сайт <strong>deltaclient.xyz</strong>.
+                Пиратские версии могут содержать вирусы!
             </div>
-
         </div>
     </div>
-
-    <!-- FOOTER -->
     <div class="footer">
-        <div class="status">
-            <span class="dot"></span> status: online &bull; inject ready
-        </div>
+        <div class="status"><span class="dot"></span> status: online</div>
         <div class="links">
-            <a href="#">Docs</a>
+            <a href="#">Support</a>
             <a href="#">Changelog</a>
-            <a href="#">FAQ</a>
+            <a href="#">Discord</a>
         </div>
     </div>
-
 </div>
-
 </body>
-</html>
+                                                                                </html>
