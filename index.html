@@ -20,7 +20,7 @@ svg{display:block}
 .dots{background-image:radial-gradient(#262626 1.5px,transparent 1.5px);background-size:38px 38px}
 header{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 10px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:500}
-.logo svg{filter:drop-shadow(0 0 10px #ff7ef099)}
+.logo svg{filter:drop-shadow(0 0 10px #7178E0)}
 .pill{display:flex;align-items:center;gap:10px;padding:10px 22px;border:1px solid var(--line);border-radius:99px;background:#0c0c0ccc;backdrop-filter:blur(10px);font-variant-numeric:tabular-nums}
 section{padding:110px 20px 70px;max-width:760px;margin:0 auto;position:relative}
 .wrap-bg{width:100%}
@@ -113,7 +113,7 @@ img{pointer-events:none;-webkit-user-drag:none;user-drag:none}
 .card::after,.bubble::after,.pill::after,.chip::after,.modal::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:var(--ga,0);background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.10),rgba(255,255,255,0) 65%)}
 
 .lg{display:contents}
-.logo img{width:38px;height:38px;border-radius:10px;object-fit:cover;filter:drop-shadow(0 0 10px #ff7ef099)}
+.logo img{width:38px;height:38px;border-radius:10px;object-fit:cover;filter:drop-shadow(0 0 10px #7178E0)}
 </style>
 </head>
 <body>
@@ -227,7 +227,7 @@ $('fq').innerHTML = S.faq.map(function(q){
 
 
 /* логотип вместо звезды; если файл не найден, показывается звезда */
-var STAR = '<svg width="38" height="38" viewBox="0 0 24 24" fill="#ff7ef0"><path d="M12 1.5l2.9 7 7.6.6-5.8 4.9 1.8 7.4L12 17.4l-6.5 4 1.8-7.4L1.5 9.1l7.6-.6z"/></svg>';
+var STAR = '<svg width="38" height="38" viewBox="0 0 24 24" fill="#7178E0"><path d="M12 1.5l2.9 7 7.6.6-5.8 4.9 1.8 7.4L12 17.4l-6.5 4 1.8-7.4L1.5 9.1l7.6-.6z"/></svg>';
 document.querySelectorAll('.lg').forEach(function(box){
   var img = new Image(); img.alt = ''; img.width = 38; img.height = 38;
   img.onerror = function(){ box.innerHTML = STAR };
